@@ -1,0 +1,147 @@
+{
+	"version": 0,
+	"dependencies": [
+		{
+			"importpath": "github.com/BurntSushi/toml",
+			"repository": "https://github.com/BurntSushi/toml",
+			"revision": "99064174e013895bbd9b025c31100bd1d9b590ca",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/Sirupsen/logrus",
+			"repository": "https://github.com/Sirupsen/logrus",
+			"revision": "3f603f494d61c73457fb234161d8982b9f0f0b71",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/codegangsta/negroni",
+			"repository": "https://github.com/codegangsta/negroni",
+			"revision": "61dbefc515b4dede6eb2de7df1e54d49edce892d",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/docker/distribution/digestset",
+			"repository": "https://github.com/docker/distribution",
+			"revision": "b1993c95303df3d0214129d85382c3c573e4df20",
+			"branch": "master",
+			"path": "/digestset"
+		},
+		{
+			"importpath": "github.com/docker/distribution/reference",
+			"repository": "https://github.com/docker/distribution",
+			"revision": "b1993c95303df3d0214129d85382c3c573e4df20",
+			"branch": "master",
+			"path": "/reference"
+		},
+		{
+			"importpath": "github.com/docker/docker/api/types",
+			"repository": "https://github.com/docker/docker",
+			"revision": "10c0af083544460a2ddc2218f37dc24a077f7d90",
+			"branch": "master",
+			"path": "/api/types"
+		},
+		{
+			"importpath": "github.com/docker/docker/client",
+			"repository": "https://github.com/docker/docker",
+			"revision": "10c0af083544460a2ddc2218f37dc24a077f7d90",
+			"branch": "master",
+			"path": "/client"
+		},
+		{
+			"importpath": "github.com/docker/docker/pkg/tlsconfig",
+			"repository": "https://github.com/docker/docker",
+			"revision": "10c0af083544460a2ddc2218f37dc24a077f7d90",
+			"branch": "master",
+			"path": "/pkg/tlsconfig"
+		},
+		{
+			"importpath": "github.com/docker/go-connections/nat",
+			"repository": "https://github.com/docker/go-connections",
+			"revision": "7da10c8c50cad14494ec818dcdfb6506265c0086",
+			"branch": "master",
+			"path": "/nat"
+		},
+		{
+			"importpath": "github.com/docker/go-connections/sockets",
+			"repository": "https://github.com/docker/go-connections",
+			"revision": "7da10c8c50cad14494ec818dcdfb6506265c0086",
+			"branch": "master",
+			"path": "/sockets"
+		},
+		{
+			"importpath": "github.com/docker/go-connections/tlsconfig",
+			"repository": "https://github.com/docker/go-connections",
+			"revision": "7da10c8c50cad14494ec818dcdfb6506265c0086",
+			"branch": "master",
+			"path": "/tlsconfig"
+		},
+		{
+			"importpath": "github.com/docker/go-units",
+			"repository": "https://github.com/docker/go-units",
+			"revision": "0dadbb0345b35ec7ef35e228dabb8de89a65bf52",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/julienschmidt/httprouter",
+			"repository": "https://github.com/julienschmidt/httprouter",
+			"revision": "8a45e95fc75cb77048068a62daed98cc22fdac7c",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/miekg/dns",
+			"repository": "https://github.com/miekg/dns",
+			"revision": "4e953232d8083f240dff0ac425afcba18bb5b722",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/opencontainers/go-digest",
+			"repository": "https://github.com/opencontainers/go-digest",
+			"revision": "aa2ec055abd10d26d539eb630a92241b781ce4bc",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/pkg/errors",
+			"repository": "https://github.com/pkg/errors",
+			"revision": "248dadf4e9068a0b3e79f02ed0a610d935de5302",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/rjeczalik/notify",
+			"repository": "https://github.com/rjeczalik/notify",
+			"revision": "9d5aa0c3b735c3340018a4627446c3ea5a04a097",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/urfave/cli",
+			"repository": "https://github.com/urfave/cli",
+			"revision": "347a9884a87374d000eec7e6445a34487c1f4a2b",
+			"branch": "master"
+		},
+		{
+			"importpath": "golang.org/x/net/context",
+			"repository": "https://go.googlesource.com/net",
+			"revision": "236b8f043b920452504e263bc21d354427127473",
+			"branch": "master",
+			"path": "/context"
+		},
+		{
+			"importpath": "golang.org/x/net/proxy",
+			"repository": "https://go.googlesource.com/net",
+			"revision": "236b8f043b920452504e263bc21d354427127473",
+			"branch": "master",
+			"path": "/proxy"
+		},
+		{
+			"importpath": "gopkg.in/urfave/cli.v1",
+			"repository": "https://gopkg.in/urfave/cli.v1",
+			"revision": "0bdeddeeb0f650497d603c4ad7b20cfe685682f6",
+			"branch": "master"
+		},
+		{
+			"importpath": "gopkg.in/yaml.v2",
+			"repository": "https://gopkg.in/yaml.v2",
+			"revision": "a3f3340b5840cee44f372bddb5880fcbc419b46a",
+			"branch": "v2"
+		}
+	]
+}

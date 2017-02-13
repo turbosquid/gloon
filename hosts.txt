@@ -1,0 +1,4 @@
+8.8.8.8 foo.google.com bar.goggles.com 
+192.168.1.1 *.bogus.local *.local
+1.1.1.1 valid.com 
+1.2.3.4  count.com  *.count.org
