@@ -35,7 +35,6 @@ func NewResolver(settings *Settings) (r *Resolver, err error) {
 	if localIps == nil {
 		return nil, fmt.Errorf("Unable to enumerate local IP addresses.")
 	}
-	log.Printf("%#v", localIps)
 	// Get fully qualified server names from resolveconf
 	for _, server := range r.Servers {
 		parts := strings.Split(server, "#")
