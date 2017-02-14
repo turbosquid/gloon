@@ -2,3 +2,4 @@ attach.sh
 up.sh
 pkg/*
 bin/*
+*.swp
