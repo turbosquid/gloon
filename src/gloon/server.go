@@ -21,7 +21,7 @@ func NewServer(addr string, settings *Settings) (s *Server, err error) {
 	dns.HandleFunc(".", func(w dns.ResponseWriter, r *dns.Msg) {
 		s.handleDnsRequest(w, r)
 	})
-	s.resolver, err = NewResolver(settings.ResolvFile)
+	s.resolver, err = NewResolver(settings)
 	s.Records.PutPairs(settings.Hostnames)
 	return
 }
@@ -48,6 +48,7 @@ func (s *Server) handleDnsRequest(w dns.ResponseWriter, r *dns.Msg) {
 		w.WriteMsg(m)
 		return
 	}
+	log.Printf("%#v", m)
 	resp, err := s.resolver.Lookup(r)
 	if err == nil {
 		w.WriteMsg(resp)
@@ -67,6 +68,22 @@ func (s *Server) processQuery(m *dns.Msg) bool {
 					m.Answer = append(m.Answer, rr)
 					return true
 				}
+			}
+		case dns.TypePTR:
+			log.Printf("Looking up PTR: %s", q.Name)
+			host := s.Get(dns.TypePTR, q.Name)
+			if host != "" {
+				rr, err := dns.NewRR(fmt.Sprintf("%s PTR %s", q.Name, host))
+				if err == nil {
+					m.Answer = append(m.Answer, rr)
+					return true
+				}
+			}
+		case dns.TypeAAAA: // For now, if we have an A record, for a name, always NXDOMAIN for corresponding AAAA records
+			ip := s.Get(dns.TypeA, q.Name)
+			if ip != "" {
+				m.Rcode = dns.RcodeNameError
+				return true
 			}
 		}
 	}

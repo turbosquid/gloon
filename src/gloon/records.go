@@ -21,6 +21,9 @@ type Records struct {
 func NewRecords() (r *Records) {
 	r = &Records{}
 	r.recs = make(AnswerMap)
+	r.recs[dns.TypeA] = make(IpMap)
+	r.recs[dns.TypeAAAA] = make(IpMap)
+	r.recs[dns.TypePTR] = make(IpMap)
 	return
 }
 
@@ -38,7 +41,15 @@ func (r *Records) Put(dnsType uint16, host, addr string) {
 	r.Lock()
 	defer r.Unlock()
 	if r.recs[dnsType] == nil {
-		r.recs[dnsType] = make(IpMap)
+		return
+	}
+	// For A or AAAA records, put in reverse DNS
+	if dnsType == dns.TypeA || dnsType == dns.TypeAAAA {
+		raddr, _ := ReverseAddr(addr)
+		if raddr != "" {
+			log.Printf("Adding %s PTR %s", raddr, host)
+			r.recs[dns.TypePTR][raddr+"."] = host
+		}
 	}
 	r.recs[dnsType][host+"."] = addr
 }
@@ -50,7 +61,12 @@ func (r *Records) Del(dnsType uint16, host string) {
 		return
 	}
 	defer r.Unlock()
+	addr := r.recs[dnsType][host+"."]
 	delete(r.recs[dnsType], host+".")
+	if addr != "" {
+		raddr, _ := ReverseAddr(addr)
+		delete(r.recs[dns.TypePTR], raddr+".")
+	}
 }
 
 func (r *Records) Get(dnsType uint16, host string) string {
