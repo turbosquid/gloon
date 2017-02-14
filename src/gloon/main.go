@@ -41,7 +41,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:        "listen, l",
-			Value:       ":5053",
+			Value:       ":53",
 			Usage:       "Resolver listens on `ADDR`",
 			Destination: &s.ResolverAddr,
 		},

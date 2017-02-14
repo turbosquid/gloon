@@ -48,7 +48,6 @@ func (s *Server) handleDnsRequest(w dns.ResponseWriter, r *dns.Msg) {
 		w.WriteMsg(m)
 		return
 	}
-	log.Printf("%#v", m)
 	resp, err := s.resolver.Lookup(r)
 	if err == nil {
 		w.WriteMsg(resp)
@@ -58,26 +57,19 @@ func (s *Server) handleDnsRequest(w dns.ResponseWriter, r *dns.Msg) {
 }
 
 func (s *Server) processQuery(m *dns.Msg) bool {
+	answers := 0
 	for _, q := range m.Question {
+		var rr dns.RR
 		switch q.Qtype {
 		case dns.TypeA:
 			ip := s.Get(dns.TypeA, q.Name)
 			if ip != "" {
-				rr, err := dns.NewRR(fmt.Sprintf("%s A %s", q.Name, ip))
-				if err == nil {
-					m.Answer = append(m.Answer, rr)
-					return true
-				}
+				rr, _ = dns.NewRR(fmt.Sprintf("%s A %s", q.Name, ip))
 			}
 		case dns.TypePTR:
-			log.Printf("Looking up PTR: %s", q.Name)
 			host := s.Get(dns.TypePTR, q.Name)
 			if host != "" {
-				rr, err := dns.NewRR(fmt.Sprintf("%s PTR %s", q.Name, host))
-				if err == nil {
-					m.Answer = append(m.Answer, rr)
-					return true
-				}
+				rr, _ = dns.NewRR(fmt.Sprintf("%s PTR %s", q.Name, host))
 			}
 		case dns.TypeAAAA: // For now, if we have an A record, for a name, always NXDOMAIN for corresponding AAAA records
 			ip := s.Get(dns.TypeA, q.Name)
@@ -85,7 +77,16 @@ func (s *Server) processQuery(m *dns.Msg) bool {
 				m.Rcode = dns.RcodeNameError
 				return true
 			}
+		default:
+			return false // If we get a question we can't answer, bail
 		}
+		if rr != nil {
+			m.Answer = append(m.Answer, rr)
+			answers++
+		}
+	}
+	if answers > 0 {
+		return true
 	}
 	return false
 }
