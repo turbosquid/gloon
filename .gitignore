@@ -3,3 +3,4 @@ up.sh
 pkg/*
 bin/*
 *.swp
+release/
