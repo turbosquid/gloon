@@ -84,5 +84,13 @@ func (r *Records) Get(dnsType uint16, host string) string {
 
 		}
 	}
+	if addr == "" { // Try adouble wildcard
+		parts := strings.SplitN(host, ".", 3)
+		if len(parts) == 3 {
+			wc := "*.*." + parts[2]
+			addr = r.recs[dnsType][wc]
+
+		}
+	}
 	return addr
 }
