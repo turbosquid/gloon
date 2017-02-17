@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ -z "$DOMAIN" ]; then 
-	DOMAIN="local"
+	DOMAIN="docker"
 fi
 echo "Forwarding for domain $DOMAIN"
 nginx
-gloon -d $DOMAIN --disable-forward
+gloon -d $DOMAIN --disable-forward -l ":5053"

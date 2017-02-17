@@ -16,3 +16,9 @@ The easiest way to get started is via one of the releases. Linux, OSX and Window
 with no dependencies. Other platforms and architectures (BSD, RPI, etc) can be easily supported if you build fronm source (see below).
 
 Simply copy the executable included in the release to somehwere on your host and you should be ready to go.
+
+## Building it
+
+You may find it helpful to set your GOPATH to the project directory:
+
+    export GOPATH=$GOPATH:`pwd`:`pwd`/vendor
