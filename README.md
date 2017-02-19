@@ -52,6 +52,6 @@ To begin, you may find it helpful to set your GOPATH to the project directory an
 
     export GOPATH=$GOPATH:`pwd`:`pwd`/vendor
 
-To build with gb, simply run `gb` in the project root. To build with go, change to `src/gloon` and run `go build`
+To build with gb, simply run `gb build` in the project root. To build with go, change to `src/gloon` and run `go build`
 
 With either method, set GOOS and GOARCH if desired to cross-compile for specific OS/Arch types.
