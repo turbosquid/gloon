@@ -44,8 +44,14 @@ will start gloon automatically on OSX startup.
 
 ## Routing to the the correct container on a VM or remote host
 
-## Building it
+## Building gloon
 
-You may find it helpful to set your GOPATH to the project directory:
+`gloon` is build with [gb](https://github.com/constabulary/gb), but you can build it with vanilla go. All dependencies are vendored under `vendor/`.
+
+To begin, you may find it helpful to set your GOPATH to the project directory and vendor directory. You *must* do this to build with `go build`:
 
     export GOPATH=$GOPATH:`pwd`:`pwd`/vendor
+
+To build with gb, simply run `gb` in the project root. To build with go, change to `src/gloon` and run `go build`
+
+With either method, set GOOS and GOARCH if desired to cross-compile for specific OS/Arch types.
