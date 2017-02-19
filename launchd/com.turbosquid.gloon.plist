@@ -6,8 +6,13 @@
         <string>com.turbosquid.gloon</string>
         <key>ProgramArguments</key>
         <array>
-            <string>/bin/bash</string>
-            <string>/Users/mowings/bin/gloon.sh</string>
+			<string>/usr/local/bin/gloon</string>
+			<string>-l</string>
+			<string>:5053</string>
+			<string>-n</string>
+			<string>*.docker=192.168.64.2</string>
+			<string>-n</string>
+			<string>*.*.docker=192.168.64.2</string>
         </array>
         <key>RunAtLoad</key>
         <true/>
