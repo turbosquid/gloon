@@ -15,8 +15,11 @@ native notification mechanisms and and/remove A records. Wildcards are also supp
 The easiest way to get started is via one of the releases. Linux, OSX and Windows are supported. There is only a single executable
 with no dependencies. Other platforms and architectures (BSD, RPI, etc) can be easily supported if you build fronm source (see below).
 
-Simply copy the executable included in the release to somehwere on your host and you should be ready to go. In general /usr/local/bin is
-is a great place to drop the binary.
+Simply copy the executable included in the release to somehwere on your host and you should be ready to go. In general /usr/local/bin is a great place to drop the binary.
+
+## Getting help
+
+Run `gloon -h` to see the available command line options
 
 ## OSX -- Forwarding all traffic to a remote host or vm using a local domain
 
