@@ -94,3 +94,15 @@ To begin, you may find it helpful to set your GOPATH to the project directory an
 To build with gb, simply run `gb build` in the project root. To build with go, change to `src/gloon` and run `go build`
 
 With either method, set GOOS and GOARCH if desired to cross-compile for specific OS/Arch types.
+
+## Known limitations
+
+* No support yet for ipv6 (AAAA) records
+* We currently only pull the docker container address from the first network found. We should probably add an optional network selector.
+* Other record lookups might be desirable (cname, etc)
+
+## Similar projects
+
+* [docker-dns-gen](https://github.com/jderusse/docker-dns-gen)
+* [resolvable] (https://github.com/gliderlabs/resolvable)
+* [docker-dns] (https://github.com/phensley/docker-dns)
