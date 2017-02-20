@@ -57,6 +57,32 @@ The nginx configuration will also allow routing traffic to particular ports on a
 
 This arrangement is convenient in complex environments where exposing ports is impractical due to the number of containers that need to be reachable, such as shared dev/demo environments, qa environments or multi-service development environments.
 
+## Deeper dive: Adding A records
+
+By default, gloon will listen for docker container events, and add and A record, as well as a PTR record for any container with a hostname set. You can set a regex via the `--hostname-filter` flag that can be used to select only matching hostnames to be published. You can disable docker event listening entirely by passing `--disable-docker`.
+
+### Adding records via the http API
+
+Use the `--api-addr` flag to enable the http API server (ex. `--api-addr "127.0.0.1:8080"`). Add or update an A (and ptr) record via PUT:
+
+    curl -XPUT http://localhost:8080/records/A/foo/192.168.1.2 # foo A 192.168.1.2
+
+Remove a record with a corresponding DELETE request:
+
+    curl -XDELETE  http://localhost:8080/records/A/foo
+    
+You can also add wildcard and double-wildcard records
+
+### Adding records via a hostfile
+
+Use the `--hostfile` flag to have gloon read and monitor a hostfile  to add and remove A records. The hostfile format is the same as `/etc/hosts`, but supports wildcards and double wildcards. gloon will attempt to use native filesystem notifications to check for changes to the hostfile, or you can set a polling interval with `--reload-interval`. Gloon will add new entries where found, and remove entries no longer in the hostfile.
+
+## DNS Forwarding
+
+By default, gloon forwards requests it can't answer to the resolvers configured in /etc/resolv.conf. You can disable forwarding behavior altogether with `--disable-forward`.  You can also specifiy a custom resolv.conf with the `--resolvconf` flag.
+
+It should be generally safe to use gloon in the default resolv.conf file, since gloon tries to be smart enough not to forward unhandled traffic to itself.
+
 ## Building gloon
 
 `gloon` is built with [gb](https://github.com/constabulary/gb), but you can build it with vanilla go as well. All dependencies are vendored under `vendor/`.
