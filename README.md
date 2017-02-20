@@ -44,6 +44,17 @@ will start gloon automatically on OSX startup.
 
 ## Routing to the the correct container on a VM or remote host
 
+The easiest way to route data to a given container is to run a container from the Dockerfile in `route/`. This will run gloon, which listens
+for docker events and creates A records for any containers with a non-default hostname. It also runs nginx, which strips the domain of of any incoming
+hostnames, and looks up the host address via gloon. If found, traffic is forwarded to the address. To work, the docker socket has to be mapped in to the container,
+and the container runs in host networking mode. Any container that we want traffic to be routed to, has to have a non-default hostname set.
+
+We can combine this with gloon running on OSX as outlined above so that if you point your OSX host browser to `http://foo.docker`, the request is forwarded to the 
+nginx router on the container host, which looks up the address of the `foo` container, and proxies the request to `foo`.
+
+This arrangement is convenient in complex environments where exposing ports is impractical due to the number of containers that need to be reachable, such as shared 
+dev/demo environments, qa environments, etc.
+
 ## Building gloon
 
 `gloon` is built with [gb](https://github.com/constabulary/gb), but you can build it with vanilla go as well. All dependencies are vendored under `vendor/`.
