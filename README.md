@@ -49,6 +49,8 @@ will start gloon automatically on OSX startup.
 
 The easiest way to route data to a given container is to run a router container from the Dockerfile in `route/`. This will run gloon, which listens for docker events and creates A records for any containers with a non-default hostname. It also runs nginx, which extracts the hostname from incoming requests and looks up the host container address via gloon. If found, traffic is forwarded to the container. 
 
+The nginx configuration will also allow routing traffic to particular ports on a target container via a psuedo-host. For example, say container `foo` is running elasticsearch, which listens for http traffic on port 9200. You can point your browser to http://p9200.foo.docker, and you will be able to reach the listening elasticsearch instance.
+
 To work, the docker socket has to be mapped in to the router container and the router container must in host networking mode. Any container that we want traffic to be routed to has to have a non-default hostname set. There is a `docker-compose.yml` file that can be used to run the router container.
 
 We can combine the request router  with gloon running on OSX as outlined above so that if you point your OSX host browser to `http://foo.docker`, the request is forwarded to the router on the container host, which looks up the address of the `foo` container, and proxies the request to `foo`.
