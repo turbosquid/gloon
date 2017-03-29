@@ -1,0 +1,13 @@
+[Unit]
+Description=Gloon resolver
+Before=
+After=network.target
+
+[Service]
+LimitNOFILE=65535
+ExecStart=/opt/gloon/gloon
+Restart=on-abort
+
+[Install]
+WantedBy=default.target
+

@@ -2,8 +2,6 @@ version: '2'
 services:
   gloon-nginx:
     build: .
-    environment:
-        - DOMAIN=${GLOON_DOMAIN}
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock 
     network_mode: host
