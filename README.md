@@ -77,7 +77,7 @@ You can also add wildcard and double-wildcard records
 
 ### Adding records via a hostfile
 
-Use the `--hostfile` flag to have gloon read and monitor a hostfile  to add and remove A records. The hostfile format is the same as `/etc/hosts`, but supports wildcards and double wildcards. gloon will attempt to use native filesystem notifications to check for changes to the hostfile, or you can set a polling interval with `--reload-interval`. Gloon will add new entries where found, and remove entries no longer in the hostfile.
+Use the `--hostfile` flag to have gloon read and monitor a hostfile  to add and remove A records. The hostfile format is the same as `/etc/hosts`, but supports wildcards and double wildcards. gloon will attempt to use native filesystem notifications to check for changes to the hostfile, or you can set a polling interval with `--reload-interval`. Gloon will add new entries where found, and remove entries no longer in the hostfile. An example file `hosts.txt` is included in the project root.
 
 ## DNS Forwarding
 
