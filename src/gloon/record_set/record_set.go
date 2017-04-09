@@ -30,7 +30,7 @@ func Create(store RecordStore) (rs *RecordSet) {
 
 func (r *RecordSet) Put(dnsType uint16, host, addr string) {
 	log.Printf("Adding/updating  %X %s A %s", dnsType, host, addr)
-	err := r.store.PutVal(dnsType, host, addr)
+	err := r.store.PutVal(dnsType, host+".", addr)
 	if err != nil {
 		log.Printf("Unable to put primary record: %s", err.Error())
 		return
@@ -40,7 +40,7 @@ func (r *RecordSet) Put(dnsType uint16, host, addr string) {
 		raddr, _ := ReverseAddr(addr)
 		if raddr != "" {
 			log.Printf("Adding %s PTR %s", raddr, host)
-			err = r.store.PutVal(dns.TypePTR, raddr, host)
+			err = r.store.PutVal(dns.TypePTR, raddr+".", host)
 			if err != nil {
 				log.Printf("Error %s addting PTR record %s => %s", raddr, host)
 			}
@@ -50,18 +50,18 @@ func (r *RecordSet) Put(dnsType uint16, host, addr string) {
 
 func (r *RecordSet) Del(dnsType uint16, host string) {
 	log.Printf("Removing %X  %s", dnsType, host)
-	addrs, err := r.store.GetAll(dnsType, host)
+	addrs, err := r.store.GetAll(dnsType, host+".")
 	if err != nil {
 		log.Printf("Unable to fetch address for host %s -- %s", host, err.Error())
 	}
 	for _, addr := range addrs {
 		raddr, _ := ReverseAddr(addr)
-		err = r.store.DelKey(dns.TypePTR, raddr)
+		err = r.store.DelKey(dns.TypePTR, raddr+".")
 		if err != nil {
 			log.Printf("Unable to remove PTR record %s -- %s", raddr, err.Error())
 		}
 	}
-	err = r.store.DelKey(dnsType, host)
+	err = r.store.DelKey(dnsType, host+".")
 	if err != nil {
 		log.Printf("Unable to remove host key %s (%s)", host, err.Error())
 	}

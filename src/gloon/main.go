@@ -9,6 +9,7 @@ import (
 const VERSION = "0.2.0"
 
 func main() {
+	log.Printf("GL00N")
 	s := Settings{}
 	s.Hostnames = []string{}
 	app := cli.NewApp()
@@ -78,6 +79,12 @@ func main() {
 		cli.StringSliceFlag{
 			Name:  "hostname, n",
 			Usage: "Add A records in the form of `HOSTNAME=IP`  ",
+		},
+		cli.StringFlag{
+			Name:        "store",
+			Value:       "memory",
+			Usage:       "Set local dns record storage type. Defaults to 'memory'. Valid values are 'redis' and 'memory'",
+			Destination: &s.Store,
 		},
 	}
 

@@ -31,8 +31,10 @@ func NewServer(addr string, settings *Settings) (s *Server, err error) {
 		if err != nil {
 			log.Fatalf("Unable to create redis record set: %s", err.Error())
 		}
-	default:
+	case "memory":
 		store = mem_rs.Create()
+	default:
+		log.Fatalf("Unknown dns record store type %s specified", settings.Store)
 	}
 	s.RecordSet = record_set.Create(store)
 	s.Server = &dns.Server{Addr: addr, Net: "udp"}
@@ -95,7 +97,7 @@ func (s *Server) processQuery(m *dns.Msg) bool {
 			if host != "" {
 				rr, _ = dns.NewRR(fmt.Sprintf("%s PTR %s", q.Name, host))
 			}
-		case dns.TypeAAAA: // For now, if we have an A record, for a name, always NXDOMAIN for corresponding AAAA records
+		case dns.TypeAAAA:
 			ip := s.Get(dns.TypeAAAA, q.Name)
 			if ip != "" {
 				rr, _ = dns.NewRR(fmt.Sprintf("%s AAAA %s", q.Name, ip))
