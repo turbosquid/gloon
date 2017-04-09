@@ -5,6 +5,7 @@ import (
 	"github.com/codegangsta/negroni"
 	"github.com/julienschmidt/httprouter"
 	"github.com/miekg/dns"
+	. "gloon/record_set"
 	"log"
 	"net/http"
 	"strings"
@@ -32,7 +33,7 @@ func Json(w http.ResponseWriter, text string, code int) {
 	fmt.Fprintf(w, text)
 }
 
-func ApiPutHost(w http.ResponseWriter, r *http.Request, ps httprouter.Params, recs *Records) {
+func ApiPutHost(w http.ResponseWriter, r *http.Request, ps httprouter.Params, recs *RecordSet) {
 	dnsType := strings.ToUpper(ps.ByName("type"))
 	host := ps.ByName("host")
 	addr := ps.ByName("ip")
@@ -45,7 +46,7 @@ func ApiPutHost(w http.ResponseWriter, r *http.Request, ps httprouter.Params, re
 	Json(w, "ok", 200)
 }
 
-func ApiDelHost(w http.ResponseWriter, r *http.Request, ps httprouter.Params, recs *Records) {
+func ApiDelHost(w http.ResponseWriter, r *http.Request, ps httprouter.Params, recs *RecordSet) {
 	dnsType := strings.ToUpper(ps.ByName("type"))
 	host := ps.ByName("host")
 	dt, ok := DnsTypes[dnsType]
@@ -57,7 +58,7 @@ func ApiDelHost(w http.ResponseWriter, r *http.Request, ps httprouter.Params, re
 	Json(w, "ok", 200)
 }
 
-func RunApiServer(settings *Settings, recs *Records) {
+func RunApiServer(settings *Settings, recs *RecordSet) {
 	router := httprouter.New()
 	router.PanicHandler = PanicHandler
 	router.PUT("/records/:type/:host/:ip", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

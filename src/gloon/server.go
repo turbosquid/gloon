@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/miekg/dns"
+	"gloon/mem_rs"
 	"gloon/record_set"
+	"gloon/redis_rs"
 	"log"
 	"regexp"
 )
@@ -19,7 +21,6 @@ var split_rex = regexp.MustCompile("[:= ]")
 
 func NewServer(addr string, settings *Settings) (s *Server, err error) {
 	s = &Server{}
-	s.Records = NewRecords()
 	s.settings = settings
 	s.Server = &dns.Server{Addr: addr, Net: "udp"}
 	dns.HandleFunc(".", func(w dns.ResponseWriter, r *dns.Msg) {
@@ -31,6 +32,15 @@ func NewServer(addr string, settings *Settings) (s *Server, err error) {
 		if len(parts) == 2 {
 			s.Records.Put(dns.TypeA, parts[0], parts[1])
 		}
+	}
+	switch settings.Store {
+	case "redis":
+		server.record_set, err = redis_rs.Create("127.0.0.1:6379", redis_rs.RedisRecordStoreOpts{})
+		if err != nil {
+			log.Fatalf("Unable to create redis record set: %s", err.Error())
+		}
+	default:
+		server.record_set = mem_rs.Create()
 	}
 	return
 }

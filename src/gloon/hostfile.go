@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/miekg/dns"
 	"github.com/rjeczalik/notify"
+	. "gloon/record_set"
 	"io/ioutil"
 	"log"
 	"path/filepath"
@@ -16,11 +17,11 @@ var ipv4_regexp = regexp.MustCompile("\\d+\\.\\d+\\.\\d+\\.\\d+")
 type Hostfile struct {
 	hosts          map[string]bool
 	fn             string
-	recs           *Records
+	recs           *RecordSet
 	reloadInterval int
 }
 
-func NewHostfile(fn string, recs *Records, reloadInterval int) (hf *Hostfile) {
+func NewHostfile(fn string, recs *RecordSet, reloadInterval int) (hf *Hostfile) {
 	hf = &Hostfile{make(map[string]bool), fn, recs, reloadInterval}
 	return
 }
