@@ -58,6 +58,10 @@ func TestMultiVals(t *testing.T) {
 	if err != nil {
 		t.Error("r.GetVal()", err)
 	}
+	if val == "" {
+		t.Error("r.GetVal()", "Unexpected empty value")
+	}
+	t.Logf("Got random entry: %s", val)
 	vals, err := r.GetAll(1, "foo.bar")
 	if err != nil {
 		t.Error("r.GetAll()", err)
