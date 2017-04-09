@@ -88,7 +88,7 @@ func main() {
 		},
 		cli.IntFlag{
 			Name:        "ttl",
-			Value:       10,
+			Value:       3600,
 			Usage:       "Returned ttl in `SEC` seconds",
 			Destination: &s.Ttl,
 		},
