@@ -91,7 +91,7 @@ func appMain(settings *Settings) (err error) {
 		log.Fatalf("Unable to create server: %s", err.Error())
 	}
 	if !settings.DisableDocker {
-		dm, err := NewDockerMonitor(s.Records, settings)
+		dm, err := NewDockerMonitor(s.RecordSet, settings)
 		if err != nil {
 			log.Printf("WARNING: unable to start docker monitor: %s. Docker hostname support will be disabled", err.Error())
 		}
@@ -100,7 +100,7 @@ func appMain(settings *Settings) (err error) {
 		}()
 	}
 	if settings.Hostfile != "" {
-		hf := NewHostfile(settings.Hostfile, s.Records, settings.HostfileReloadInterval)
+		hf := NewHostfile(settings.Hostfile, s.RecordSet, settings.HostfileReloadInterval)
 		go func() {
 			hf.Run()
 		}()
@@ -108,7 +108,7 @@ func appMain(settings *Settings) (err error) {
 
 	if settings.ApiAddr != "" {
 		go func() {
-			RunApiServer(settings, s.Records)
+			RunApiServer(settings, s.RecordSet)
 		}()
 	}
 	err = s.ListenAndServe()
