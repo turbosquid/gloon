@@ -27,7 +27,7 @@ func NewServer(addr string, settings *Settings) (s *Server, err error) {
 	var store record_set.RecordStore
 	switch settings.Store {
 	case "redis":
-		store, err = redis_rs.Create("127.0.0.1:6379", &redis_rs.RedisRecordStoreOpts{})
+		store, err = redis_rs.Create(settings.StoreOpts)
 		if err != nil {
 			log.Fatalf("Unable to create redis record set: %s", err.Error())
 		}

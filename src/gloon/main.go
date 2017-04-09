@@ -86,6 +86,12 @@ func main() {
 			Usage:       "Set local dns record storage to `TYPE`. Valid values are 'redis' and 'memory'",
 			Destination: &s.Store,
 		},
+		cli.StringFlag{
+			Name:        "store-opts",
+			Value:       "",
+			Usage:       "Set record store options to `STRING`. Specific values depend on store type. Ex. for redis to set server addr and db: '10.14.2.3:6379,1'",
+			Destination: &s.StoreOpts,
+		},
 		cli.IntFlag{
 			Name:        "ttl",
 			Value:       3600,

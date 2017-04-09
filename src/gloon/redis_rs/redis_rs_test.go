@@ -5,7 +5,7 @@ import (
 )
 
 func TestPutGetDel(t *testing.T) {
-	r, err := Create("localhost:6379", &RedisRecordStoreOpts{Namespace: "test"})
+	r, err := Create("localhost:6379,2,test")
 	if err != nil {
 		t.Error("CreateRecordStore", err.Error())
 	}
@@ -38,7 +38,7 @@ func TestPutGetDel(t *testing.T) {
 }
 
 func TestMultiVals(t *testing.T) {
-	r, err := Create("localhost:6379", &RedisRecordStoreOpts{Namespace: "test"})
+	r, err := Create("localhost:6379,2,test")
 	if err != nil {
 		t.Error("CreateRecordStore", err.Error())
 	}

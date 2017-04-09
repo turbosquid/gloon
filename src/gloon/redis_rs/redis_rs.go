@@ -3,6 +3,8 @@ package redis_rs
 import (
 	"fmt"
 	"github.com/garyburd/redigo/redis"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -16,18 +18,28 @@ type RedisRecordStoreOpts struct {
 	Namespace string
 }
 
-func Create(address string, opts *RedisRecordStoreOpts) (r *RedisRecordStore, err error) {
+func Create(opts string) (r *RedisRecordStore, err error) {
+	options := strings.Split(opts, ",")
+	addr := "127.0.0.1:6379"
+	db := 0
+	ns := "gloon"
+	if len(options) >= 1 && options[0] != "" {
+		addr = options[0]
+	}
+	if len(options) >= 2 {
+		db, _ = strconv.Atoi(options[1])
+	}
+	if len(options) >= 3 {
+		ns = options[2]
+	}
 	pool := &redis.Pool{
 		MaxIdle:     3,
 		IdleTimeout: 240 * time.Second,
 		Dial: func() (redis.Conn, error) {
-			return redis.Dial("tcp", address, redis.DialDatabase(opts.Database))
+			return redis.Dial("tcp", addr, redis.DialDatabase(db))
 		},
 	}
-	r = &RedisRecordStore{pool: pool, namespace: "gloon"}
-	if opts.Namespace != "" {
-		r.namespace = opts.Namespace
-	}
+	r = &RedisRecordStore{pool: pool, namespace: ns}
 	return
 }
 
