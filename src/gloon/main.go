@@ -83,13 +83,13 @@ func main() {
 		cli.StringFlag{
 			Name:        "store",
 			Value:       "memory",
-			Usage:       "Set local dns record storage type. Defaults to 'memory'. Valid values are 'redis' and 'memory'",
+			Usage:       "Set local dns record storage `TYPE`. Valid values are 'redis' and 'memory'",
 			Destination: &s.Store,
 		},
 		cli.IntFlag{
 			Name:        "ttl",
 			Value:       10,
-			Usage:       "Returnd ttl in `SEC` seconds",
+			Usage:       "Returned ttl in `SEC` seconds",
 			Destination: &s.Ttl,
 		},
 	}
