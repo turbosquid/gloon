@@ -90,17 +90,17 @@ func (s *Server) processQuery(m *dns.Msg) bool {
 		case dns.TypeA:
 			ip := s.Get(dns.TypeA, q.Name)
 			if ip != "" {
-				rr, _ = dns.NewRR(fmt.Sprintf("%s A %s", q.Name, ip))
+				rr, _ = dns.NewRR(fmt.Sprintf("%s %d A %s", q.Name, s.settings.Ttl, ip))
 			}
 		case dns.TypePTR:
 			host := s.Get(dns.TypePTR, q.Name)
 			if host != "" {
-				rr, _ = dns.NewRR(fmt.Sprintf("%s PTR %s", q.Name, host))
+				rr, _ = dns.NewRR(fmt.Sprintf("%s %d PTR %s", q.Name, s.settings.Ttl, host))
 			}
 		case dns.TypeAAAA:
 			ip := s.Get(dns.TypeAAAA, q.Name)
 			if ip != "" {
-				rr, _ = dns.NewRR(fmt.Sprintf("%s AAAA %s", q.Name, ip))
+				rr, _ = dns.NewRR(fmt.Sprintf("%s %d AAAA %s", q.Name, s.settings.Ttl, ip))
 			}
 		default:
 			return false // If we get a question we can't answer, bail

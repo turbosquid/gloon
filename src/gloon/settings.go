@@ -15,4 +15,5 @@ type Settings struct {
 	Hostnames              []string // Hostnames to add from the command line
 	Store                  string   // Defaults to memory. "redis" for redis
 	StoreOpts              string   // Store-specific options
+	Ttl                    int      // TTL to apply. Defaults to 10
 }
