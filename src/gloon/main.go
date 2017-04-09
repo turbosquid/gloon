@@ -83,7 +83,7 @@ func main() {
 		cli.StringFlag{
 			Name:        "store",
 			Value:       "memory",
-			Usage:       "Set local dns record storage `TYPE`. Valid values are 'redis' and 'memory'",
+			Usage:       "Set local dns record storage to `TYPE`. Valid values are 'redis' and 'memory'",
 			Destination: &s.Store,
 		},
 		cli.IntFlag{
