@@ -3,15 +3,19 @@ package main
 import (
 	"fmt"
 	"github.com/miekg/dns"
+	"gloon/record_set"
 	"log"
+	"regexp"
 )
 
 type Server struct {
 	*dns.Server
-	*Records
+	*record_set.RecordSet
 	resolver *Resolver
 	settings *Settings
 }
+
+var split_rex = regexp.MustCompile("[:= ]")
 
 func NewServer(addr string, settings *Settings) (s *Server, err error) {
 	s = &Server{}
@@ -22,7 +26,12 @@ func NewServer(addr string, settings *Settings) (s *Server, err error) {
 		s.handleDnsRequest(w, r)
 	})
 	s.resolver, err = NewResolver(settings)
-	s.Records.PutPairs(settings.Hostnames)
+	for _, v := range settings.Hostnames {
+		parts := split_rex.Split(v, -1)
+		if len(parts) == 2 {
+			s.Records.Put(dns.TypeA, parts[0], parts[1])
+		}
+	}
 	return
 }
 
