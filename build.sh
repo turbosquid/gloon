@@ -4,7 +4,7 @@ mkdir -p bin/release-osx
 mkdir -p bin/release-linux
 mkdir -p release
 GOOS=linux gb build
-GOOS=darwin gb build
+GOOS=darwin gb build -ldflags=-s
 
 if [[ $OSTYPE == darwin* ]]; then 
 	cp bin/gloon bin/release-osx/gloon
