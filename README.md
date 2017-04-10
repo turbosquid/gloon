@@ -129,7 +129,7 @@ instances of gloon with the same store opts to share an instance of redis.
 ## Known limitations
 
 * The docker monitor does not support multiple addresses for a single host, as this does not make much sense.
-* No ipv6 support in hostfiles at the moment
+* IPV6 support is still very incomplete
 * We currently only pull the docker container address from the first network found. We should probably add an optional network selector.
 * Other record lookups might be desirable (cname, etc)
 
