@@ -48,6 +48,11 @@ func (rri *RrIndexes) NextVal(dnsType uint16, key string, vals []string) (val st
 	return
 }
 
+func (rri *RrIndexes) Del(dnsType uint16, key string) {
+	kp := fmt.Sprintf("/%d/%s", dnsType, key)
+	delete(rri.indexes, kp)
+}
+
 type RecordSet struct {
 	store      RecordStore
 	rr_indexes *RrIndexes
@@ -95,6 +100,7 @@ func (r *RecordSet) Del(dnsType uint16, host string) {
 	if err != nil {
 		log.Printf("Unable to remove host key %s (%s)", host, err.Error())
 	}
+	r.rr_indexes.Del(dnsType, host)
 }
 
 func (r *RecordSet) DelAddr(dnsType uint16, host, addr string) {
@@ -109,6 +115,7 @@ func (r *RecordSet) DelAddr(dnsType uint16, host, addr string) {
 	if err != nil {
 		log.Printf("Unable to remove PTR record %s -- %s", raddr, err.Error())
 	}
+	r.rr_indexes.Del(dnsType, host)
 }
 
 func (r *RecordSet) Get(dnsType uint16, host string) (addr string) {
