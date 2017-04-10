@@ -74,15 +74,22 @@ Use the `--api-addr` flag to enable the http API server (ex. `--api-addr "127.0.
 
     curl -XPUT http://localhost:8080/records/A/foo/192.168.1.2 # foo A 192.168.1.2
 
+Adding multiple addresses for ther same host creates multiple A records for the same host,
+
 Remove a record with a corresponding DELETE request:
 
     curl -XDELETE  http://localhost:8080/records/A/foo
+    curl -XDELETE  http://localhost:8080/records/A/foo/192.168.1.2
+
+The first form removes all records for a host. The second form removes a specific address associated with a host
     
 You can also add wildcard and double-wildcard records
 
 ### Adding records via a hostfile
 
 Use the `--hostfile` flag to have gloon read and monitor a hostfile  to add and remove A records. The hostfile format is the same as `/etc/hosts`, but supports wildcards and double wildcards. gloon will attempt to use native filesystem notifications to check for changes to the hostfile, or you can set a polling interval with `--reload-interval`. Gloon will add new entries where found, and remove entries no longer in the hostfile. An example file `hosts.txt` is included in the project root.
+
+You may also add multiple IPs for a single host
 
 ## DNS Forwarding
 
@@ -121,6 +128,8 @@ instances of gloon with the same store opts to share an instance of redis.
 
 ## Known limitations
 
+* The docker monitor does not support multiple addresses for a single host, as this does not make much sense.
+* No ipv6 support in hostfiles at the moment
 * We currently only pull the docker container address from the first network found. We should probably add an optional network selector.
 * Other record lookups might be desirable (cname, etc)
 

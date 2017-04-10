@@ -14,15 +14,19 @@ import (
 
 var ipv4_regexp = regexp.MustCompile("\\d+\\.\\d+\\.\\d+\\.\\d+")
 
+type HostPair struct {
+	host, addr string
+}
+
 type Hostfile struct {
-	hosts          map[string]bool
+	hosts          map[HostPair]bool
 	fn             string
 	recs           *RecordSet
 	reloadInterval int
 }
 
 func NewHostfile(fn string, recs *RecordSet, reloadInterval int) (hf *Hostfile) {
-	hf = &Hostfile{make(map[string]bool), fn, recs, reloadInterval}
+	hf = &Hostfile{make(map[HostPair]bool), fn, recs, reloadInterval}
 	return
 }
 
@@ -63,7 +67,7 @@ func (hf *Hostfile) Run() {
 }
 
 func (hf *Hostfile) loadHosts() (err error) {
-	hosts := make(map[string]bool)
+	hosts := make(map[HostPair]bool)
 	hm, err := parseHosts(hf.fn)
 	if err != nil {
 		return err
@@ -73,16 +77,17 @@ func (hf *Hostfile) loadHosts() (err error) {
 			continue
 		}
 		for _, hn := range hostnames {
-			if !hf.hosts[hn] { // Dont incur the log cost
+			hp := HostPair{hn, ip}
+			if !hf.hosts[hp] { // Dont incur the log cost
 				hf.recs.Put(dns.TypeA, hn, ip)
 			}
-			hosts[hn] = true
+			hosts[hp] = true
 		}
 	}
 	// Remove hosts not in new file
-	for hn, _ := range hf.hosts {
-		if !hosts[hn] {
-			hf.recs.Del(dns.TypeA, hn)
+	for hp, _ := range hf.hosts {
+		if !hosts[hp] {
+			hf.recs.DelAddr(dns.TypeA, hp.host, hp.addr)
 		}
 	}
 	hf.hosts = hosts
