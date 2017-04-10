@@ -75,4 +75,15 @@ func TestMultiVals(t *testing.T) {
 	if val != "127.0.0.2" {
 		t.Errorf("Got %s, expected 127.0.0.2", val)
 	}
+	err = r.DelVal(1, "foo.bar", "127.0.0.2")
+	if err != nil {
+		t.Error("r.DelValue()", err)
+	}
+	val, err = r.GetVal(1, "foo.bar")
+	if err != nil {
+		t.Error("r.GetVal()", err)
+	}
+	if val != "" {
+		t.Errorf("Got %s, expected empty value", val)
+	}
 }
