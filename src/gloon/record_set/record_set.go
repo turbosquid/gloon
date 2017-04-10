@@ -67,6 +67,20 @@ func (r *RecordSet) Del(dnsType uint16, host string) {
 	}
 }
 
+func (r *RecordSet) DelAddr(dnsType uint16, host, addr string) {
+	log.Printf("Removing %X  %s %s", dnsType, host, addr)
+	err := r.store.DelVal(dnsType, host+".", addr)
+	if err != nil {
+		log.Printf("Unable to delete  address %s for host %s -- %s", addr, host, err.Error())
+		return
+	}
+	raddr, _ := ReverseAddr(addr)
+	err = r.store.DelKey(dns.TypePTR, raddr+".")
+	if err != nil {
+		log.Printf("Unable to remove PTR record %s -- %s", raddr, err.Error())
+	}
+}
+
 func (r *RecordSet) Get(dnsType uint16, host string) (addr string) {
 	addr, err := r.store.GetVal(dnsType, host)
 	if err != nil {
