@@ -9,7 +9,7 @@ import (
 const VERSION = "1.0.0"
 
 func main() {
-	log.Printf("GL00N")
+	log.Printf("I AM GL00N")
 	s := Settings{}
 	s.Hostnames = []string{}
 	app := cli.NewApp()
