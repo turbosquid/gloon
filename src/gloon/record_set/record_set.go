@@ -14,7 +14,6 @@ import (
 // Key/value store used for dns records. keys are unique, but each key has a list of values
 type RecordStore interface {
 	PutVal(dnsType uint16, key, val string) error        // Put a single key/value type into store.
-	GetVal(dnsType uint16, key string) (string, error)   // Gets a single value. Will round robin or randomly select  if multiple values
 	GetAll(dnsType uint16, key string) ([]string, error) // Get all key values
 	DelKey(dnsType uint16, key string) error             // Deletes key and all values for a
 	DelVal(dnsType uint16, key, value string) error      // Deletes a single value from a key. Deletes key ifthere are no more values

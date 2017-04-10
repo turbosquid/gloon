@@ -67,17 +67,6 @@ func (r *RedisRecordStore) Clear() (err error) {
 	return
 }
 
-func (r *RedisRecordStore) GetVal(dnsType uint16, key string) (val string, err error) {
-	conn := r.pool.Get()
-	defer conn.Close()
-	v, err := conn.Do("SRANDMEMBER", r.keyPath(dnsType, key)) // Not RR -- we just pull a random value
-	val, err = redis.String(v, err)
-	if err == redis.ErrNil {
-		err = nil
-	}
-	return
-}
-
 func (r *RedisRecordStore) GetAll(dnsType uint16, key string) (vals []string, err error) {
 	conn := r.pool.Get()
 	defer conn.Close()

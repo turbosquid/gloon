@@ -7,10 +7,6 @@ import (
 )
 
 func TestAll(t *testing.T) {
-	// r, err := redis_rs.Create("localhost:6379", &redis_rs.RedisRecordStoreOpts{Namespace: "test"})
-	// if err != nil {
-	// t.Error("CreateRecordStore", err.Error())
-	// }
 	r := mem_rs.Create()
 	r.Clear()
 	rs := Create(r)

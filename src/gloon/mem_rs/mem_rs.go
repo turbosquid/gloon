@@ -32,27 +32,6 @@ func (rs *MemRecordStore) PutVal(dnsType uint16, key, val string) (err error) {
 	return
 }
 
-func (rs *MemRecordStore) GetVal(dnsType uint16, key string) (val string, err error) {
-	rs.Lock()
-	defer rs.Unlock()
-	valmap := rs.data[keyPath(dnsType, key)]
-	if valmap == nil {
-		return
-	}
-	vals := getKeysFromMap(valmap)
-	if len(vals) == 0 {
-		return
-	}
-	if len(vals) == 1 {
-		val = vals[0]
-		return
-	}
-
-	// Return a random value
-	val = vals[rand.Intn(len(vals))]
-	return
-}
-
 func (rs *MemRecordStore) GetAll(dnsType uint16, key string) (vals []string, err error) {
 	rs.Lock()
 	defer rs.Unlock()
