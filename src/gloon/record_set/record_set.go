@@ -5,7 +5,9 @@ import (
 	"github.com/miekg/dns"
 	"log"
 	"net"
+	"sort"
 	"strings"
+	"sync"
 )
 
 //
@@ -19,12 +21,40 @@ type RecordStore interface {
 	Clear() error                                        // Clear all keys from set
 }
 
+type RrIndexes struct {
+	sync.Mutex
+	indexes map[string]int
+}
+
+func (rri *RrIndexes) NextVal(dnsType uint16, key string, vals []string) (val string) {
+	vl := len(vals)
+	if vl == 0 {
+		return
+	}
+	if vl == 1 {
+		val = vals[0]
+		return
+	}
+	sort.Strings(vals)
+	rri.Lock()
+	defer rri.Unlock()
+	kp := fmt.Sprintf("/%d/%s", dnsType, key)
+	idx := rri.indexes[kp]
+	if idx >= vl {
+		idx = 0
+	}
+	val = vals[idx]
+	rri.indexes[kp] = idx + 1
+	return
+}
+
 type RecordSet struct {
-	store RecordStore
+	store      RecordStore
+	rr_indexes *RrIndexes
 }
 
 func Create(store RecordStore) (rs *RecordSet) {
-	rs = &RecordSet{store}
+	rs = &RecordSet{store, &RrIndexes{indexes: make(map[string]int)}}
 	return
 }
 
@@ -82,34 +112,34 @@ func (r *RecordSet) DelAddr(dnsType uint16, host, addr string) {
 }
 
 func (r *RecordSet) Get(dnsType uint16, host string) (addr string) {
-	addr, err := r.store.GetVal(dnsType, host)
+	addrs, err := r.store.GetAll(dnsType, host)
 	if err != nil {
 		log.Printf("Unable to fetch value: %s", err.Error())
 		return
 	}
-	if addr == "" { // Try a wildcard
+	if len(addrs) == 0 { // Try a wildcard
 		parts := strings.SplitN(host, ".", 2)
 		if len(parts) == 2 {
 			wc := "*." + parts[1]
-			addr, err = r.store.GetVal(dnsType, wc)
+			addrs, err = r.store.GetAll(dnsType, wc)
 			if err != nil {
 				log.Printf("Unable to fetch value: %s", err.Error())
 				return
 			}
 		}
 	}
-	if addr == "" { // Try adouble wildcard
+	if len(addrs) == 0 { // Try adouble wildcard
 		parts := strings.SplitN(host, ".", 3)
 		if len(parts) == 3 {
 			wc := "*.*." + parts[2]
-			addr, err = r.store.GetVal(dnsType, wc)
+			addrs, err = r.store.GetAll(dnsType, wc)
 			if err != nil {
 				log.Printf("Unable to fetch value: %s", err.Error())
 				return
 			}
 		}
 	}
-	return addr
+	return r.rr_indexes.NextVal(dnsType, host, addrs)
 }
 
 // Taken somewhat from stdlib dnsclient.go
