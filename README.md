@@ -1,6 +1,6 @@
 # gloon -  Cross Platform DNS Resolver/Forwarder with Docker Integration, API and More
 
-`gloon` is a forwarding DNS resolver that allows you to dynamically create custom A or A wildcard dns
+`gloon` is a forwarding DNS resolver that allows you to dynamically create custom A, AAAA,  or A wildcard dns
 records via some or all of the following mechanisms:
 
 * In response to docker events. A entries can be created and removed in response to container starts and stops. You can specify
@@ -9,8 +9,13 @@ rules that control what containers get A records created, as well as a psuedo-do
 * In response to changes in a hosts file. `gloon` can monitor any `/etc/hosts` compatible file for changes via polling or
 native notification mechanisms and and/remove A records. Wildcards are also supported as above.
 * A records can also be added via the command line at startup. Wildcards are supported.
+* Support multiple hosts for a single address, or multiple address for a single host (round-robin)
+* Creates reverse-dns records auromatically
+* Optional persistent dns record storage via redis -- multiple gloon instances can share data via redis. Other store types coming
 
-Gloon runs as a single binary with no dependencies. Just copy the binary to a host and run it.
+
+Gloon runs as a single binary with no dependencies by default. Just copy the binary to a host and run it. If you choose to use
+redis as a backing store, you'll need to have a redis server available.
 
 ## Installation
 
@@ -69,15 +74,22 @@ Use the `--api-addr` flag to enable the http API server (ex. `--api-addr "127.0.
 
     curl -XPUT http://localhost:8080/records/A/foo/192.168.1.2 # foo A 192.168.1.2
 
+Adding multiple addresses for ther same host creates multiple A records for the same host,
+
 Remove a record with a corresponding DELETE request:
 
     curl -XDELETE  http://localhost:8080/records/A/foo
+    curl -XDELETE  http://localhost:8080/records/A/foo/192.168.1.2
+
+The first form removes all records for a host. The second form removes a specific address associated with a host
     
 You can also add wildcard and double-wildcard records
 
 ### Adding records via a hostfile
 
 Use the `--hostfile` flag to have gloon read and monitor a hostfile  to add and remove A records. The hostfile format is the same as `/etc/hosts`, but supports wildcards and double wildcards. gloon will attempt to use native filesystem notifications to check for changes to the hostfile, or you can set a polling interval with `--reload-interval`. Gloon will add new entries where found, and remove entries no longer in the hostfile. An example file `hosts.txt` is included in the project root.
+
+You may also add multiple IPs for a single host
 
 ## DNS Forwarding
 
@@ -97,9 +109,27 @@ To build with gb, simply run `gb build` in the project root. To build with go, c
 
 With either method, set GOOS and GOARCH if desired to cross-compile for specific OS/Arch types.
 
+## Persistent/Shared DNS record storage
+
+By default, gloon stores added dns records in local process memory. However, gloon allows you to use redis as a backing store if desired. When
+redis is used used, dns records can persist between redis restarts, and multiple gloon processes can use a shared redis server for fault-tolerance.
+
+To enable the redis store pass the store option to gloon:
+
+    gloon --store=redis
+
+By default, gloon will attempt to use a redis server listening on `localhost:6379`. Gloon namespaces any keys it uses in redis with `/gloon` and uses
+redis db 0 by default. You can change any of these parameters by passing a comma-delimited set of store-opts when you start gloon. For example:
+
+    gloon --store=redis --store-opts="10.10.0.13:6379,2,test"
+
+would cause gloon to use a redis server at 10.10.0.13 (port 6379), selecting database 2 and using `test` as a namespace. You can start multiple
+instances of gloon with the same store opts to share an instance of redis. 
+
 ## Known limitations
 
-* No support yet for ipv6 (AAAA) records
+* The docker monitor does not support multiple addresses for a single host, as this does not make much sense.
+* No ipv6 support in hostfiles at the moment
 * We currently only pull the docker container address from the first network found. We should probably add an optional network selector.
 * Other record lookups might be desirable (cname, etc)
 

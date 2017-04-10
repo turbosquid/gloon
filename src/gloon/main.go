@@ -6,9 +6,10 @@ import (
 	"os"
 )
 
-const VERSION = "0.2.0"
+const VERSION = "1.0.0"
 
 func main() {
+	log.Printf("I AM GL00N")
 	s := Settings{}
 	s.Hostnames = []string{}
 	app := cli.NewApp()
@@ -79,6 +80,24 @@ func main() {
 			Name:  "hostname, n",
 			Usage: "Add A records in the form of `HOSTNAME=IP`  ",
 		},
+		cli.StringFlag{
+			Name:        "store",
+			Value:       "memory",
+			Usage:       "Set local dns record storage to `TYPE`. Valid values are 'redis' and 'memory'",
+			Destination: &s.Store,
+		},
+		cli.StringFlag{
+			Name:        "store-opts",
+			Value:       "",
+			Usage:       "Set record store options to `STRING`. Specific values depend on store type. Ex. for redis to set server addr and db: '10.14.2.3:6379,1'",
+			Destination: &s.StoreOpts,
+		},
+		cli.IntFlag{
+			Name:        "ttl",
+			Value:       3600,
+			Usage:       "Returned ttl in `SEC` seconds",
+			Destination: &s.Ttl,
+		},
 	}
 
 	app.Run(os.Args)
@@ -91,7 +110,7 @@ func appMain(settings *Settings) (err error) {
 		log.Fatalf("Unable to create server: %s", err.Error())
 	}
 	if !settings.DisableDocker {
-		dm, err := NewDockerMonitor(s.Records, settings)
+		dm, err := NewDockerMonitor(s.RecordSet, settings)
 		if err != nil {
 			log.Printf("WARNING: unable to start docker monitor: %s. Docker hostname support will be disabled", err.Error())
 		}
@@ -100,7 +119,7 @@ func appMain(settings *Settings) (err error) {
 		}()
 	}
 	if settings.Hostfile != "" {
-		hf := NewHostfile(settings.Hostfile, s.Records, settings.HostfileReloadInterval)
+		hf := NewHostfile(settings.Hostfile, s.RecordSet, settings.HostfileReloadInterval)
 		go func() {
 			hf.Run()
 		}()
@@ -108,7 +127,7 @@ func appMain(settings *Settings) (err error) {
 
 	if settings.ApiAddr != "" {
 		go func() {
-			RunApiServer(settings, s.Records)
+			RunApiServer(settings, s.RecordSet)
 		}()
 	}
 	err = s.ListenAndServe()

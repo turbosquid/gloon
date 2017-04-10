@@ -7,19 +7,20 @@ import (
 	"github.com/docker/docker/api/types/network"
 	"github.com/docker/docker/client"
 	"github.com/miekg/dns"
+	. "gloon/record_set"
 	"log"
 	"regexp"
 	"strings"
 )
 
 type DockerMonitor struct {
-	recs            *Records
+	recs            *RecordSet
 	settings        *Settings
 	cli             *client.Client
 	hostname_filter *regexp.Regexp
 }
 
-func NewDockerMonitor(recs *Records, settings *Settings) (dm *DockerMonitor, err error) {
+func NewDockerMonitor(recs *RecordSet, settings *Settings) (dm *DockerMonitor, err error) {
 	cli, err := client.NewEnvClient()
 	if err != nil {
 		return
