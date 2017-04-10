@@ -41,6 +41,8 @@ func TestAll(t *testing.T) {
 	if addr != "10.11.12.13" {
 		t.Errorf("rs.Get() unexepected value: %s -- expected 10.11.12.13", addr)
 	}
+
+	// Round robin testing
 	rs.Put(dns.TypeA, "test.example.com", "1.2.3.4")
 	rs.Put(dns.TypeA, "test.example.com", "1.2.3.5")
 	rs.Put(dns.TypeA, "test.example.com", "1.2.3.6")
@@ -58,6 +60,7 @@ func TestAll(t *testing.T) {
 		t.Errorf("Unexpected value: %s", addr)
 	}
 
+	// Falls back to wildcard after deleted
 	rs.Del(dns.TypeA, "test.example.com")
 	if addr = rs.Get(dns.TypeA, "test.example.com."); addr != "3.4.5.6" {
 		t.Errorf("rs.Get() unexepected value: %s -- expected 3.4.5.6", addr)
