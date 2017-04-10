@@ -50,6 +50,8 @@ func (rri *RrIndexes) NextVal(dnsType uint16, key string, vals []string) (val st
 
 func (rri *RrIndexes) Del(dnsType uint16, key string) {
 	kp := fmt.Sprintf("/%d/%s", dnsType, key)
+	rri.Lock()
+	defer rri.Unlock()
 	delete(rri.indexes, kp)
 }
 
