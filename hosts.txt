@@ -2,3 +2,6 @@
 192.168.1.1 *.bogus.local *.local
 1.1.1.1 valid.com 
 1.2.3.4  count.com  *.count.org
+10.10.0.1 foo.multiple.com
+10.10.0.2 foo.multiple.com
+10.10.0.3 foo.multiple.com
