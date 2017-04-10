@@ -11,7 +11,7 @@ native notification mechanisms and and/remove A records. Wildcards are also supp
 * A records can also be added via the command line at startup. Wildcards are supported.
 * Support multiple hosts for a single address, or multiple address for a single host (round-robin)
 * Creates reverse-dns records auromatically
-* optional persistent dns record storage via redis -- multiple gloon instances can share data via redis. Other store types coming
+* Optional persistent dns record storage via redis -- multiple gloon instances can share data via redis. Other store types coming
 
 
 Gloon runs as a single binary with no dependencies by default. Just copy the binary to a host and run it. If you choose to use
@@ -105,7 +105,7 @@ With either method, set GOOS and GOARCH if desired to cross-compile for specific
 ## Persistent/Shared DNS record storage
 
 By default, gloon stores added dns records in local process memory. However, gloon allows you to use redis as a backing store if desired. When
-redis used used, dns records can persist between redis restarts, and multiple gloon processes can use a shared redis server for fault-tolerance.
+redis is used used, dns records can persist between redis restarts, and multiple gloon processes can use a shared redis server for fault-tolerance.
 
 To enable the redis store pass the store option to gloon:
 
