@@ -125,6 +125,8 @@ func (r *Resolver) Lookup(req *dns.Msg) (msg *dns.Msg, err error) {
 func (r *Resolver) lookup(req *dns.Msg, nameserver string, wg *sync.WaitGroup, c chan *dns.Msg) {
 	defer wg.Done()
 	qname := req.Question[0].Name
+	qtype := req.Question[0].Qtype
+
 	rsp, rtt, err := r.Exchange(req, nameserver)
 	if err != nil {
 		log.Printf("Resolver error on %s (%s) -- %s", nameserver, qname, err.Error())
@@ -136,7 +138,7 @@ func (r *Resolver) lookup(req *dns.Msg, nameserver string, wg *sync.WaitGroup, c
 			return // Only bail if the server fails
 		}
 	} else {
-		log.Printf("%s resolved by %s rtt: %d", qname, nameserver, rtt)
+		log.Printf("%s (%d) resolved by %s rtt: %d", qname, qtype, nameserver, rtt)
 	}
 	select {
 	case c <- rsp:
