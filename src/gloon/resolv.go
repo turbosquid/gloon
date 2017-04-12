@@ -138,7 +138,9 @@ func (r *Resolver) lookup(req *dns.Msg, nameserver string, wg *sync.WaitGroup, c
 			return // Only bail if the server fails
 		}
 	} else {
-		log.Printf("%s (%d) resolved by %s rtt: %d", qname, qtype, nameserver, rtt)
+		if r.settings.Debug {
+			log.Printf("%s (%d) resolved by %s rtt: %d", qname, qtype, nameserver, rtt)
+		}
 	}
 	select {
 	case c <- rsp:

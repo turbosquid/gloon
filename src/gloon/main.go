@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-const VERSION = "1.0.0"
+const VERSION = "1.0.1"
 
 func main() {
 	log.Printf("I AM GL00N")
@@ -33,6 +33,16 @@ func main() {
 			Name:        "disable-docker",
 			Usage:       "Disable docker support",
 			Destination: &s.DisableDocker,
+		},
+		cli.BoolFlag{
+			Name:        "no-ptr",
+			Usage:       "Disable auitomatic PTR record  creation",
+			Destination: &s.NoPtr,
+		},
+		cli.BoolFlag{
+			Name:        "debug",
+			Usage:       "More verbose messaging",
+			Destination: &s.Debug,
 		},
 		cli.StringFlag{
 			Name:        "resolvconf, r",

@@ -79,3 +79,15 @@ func TestMultiVals(t *testing.T) {
 		t.Errorf("Got %#v, expected empty value", vals)
 	}
 }
+
+func BenchmarkGet3(b *testing.B) {
+	r := Create()
+	r.Clear()
+	r.PutVal(1, "foo.com", "1.2.3.4")
+	r.PutVal(1, "foo.com", "1.2.3.5")
+	r.PutVal(1, "foo.com", "1.2.3.6")
+	for n := 0; n < b.N; n++ {
+		r.GetAll(1, "foo.com")
+	}
+	r.DelKey(1, "foo.com")
+}

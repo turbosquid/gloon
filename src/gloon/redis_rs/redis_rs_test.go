@@ -1,6 +1,7 @@
 package redis_rs
 
 import (
+	"sort"
 	"testing"
 )
 
@@ -84,4 +85,17 @@ func TestMultiVals(t *testing.T) {
 	if len(vals) != 0 {
 		t.Errorf("Got %#v, expected empty value", vals)
 	}
+}
+
+func BenchmarkGet3(b *testing.B) {
+	r, _ := Create("localhost:6379,2,test")
+	r.Clear()
+	r.PutVal(1, "foo.com", "1.2.3.4")
+	r.PutVal(1, "foo.com", "1.2.3.5")
+	r.PutVal(1, "foo.com", "1.2.3.6")
+	for n := 0; n < b.N; n++ {
+		v, _ := r.GetAll(1, "foo.com")
+		sort.Strings(v)
+	}
+	r.DelKey(1, "foo.com")
 }

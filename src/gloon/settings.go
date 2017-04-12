@@ -16,4 +16,6 @@ type Settings struct {
 	Store                  string   // Defaults to memory. "redis" for redis
 	StoreOpts              string   // Store-specific options
 	Ttl                    int      // TTL to apply. Defaults to 10
+	NoPtr                  bool     // Don't create ptr records automatically when set
+	Debug                  bool     // More logging when set
 }

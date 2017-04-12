@@ -107,6 +107,9 @@ func (s *Server) processQuery(m *dns.Msg) bool {
 		}
 		if rr != nil {
 			m.Answer = append(m.Answer, rr)
+			if s.settings.Debug {
+				log.Printf("Resolved request. RR: %s", rr.String())
+			}
 			answers++
 		}
 	}
