@@ -91,16 +91,19 @@ func (s *Server) processQuery(m *dns.Msg) bool {
 			ip := s.Get(dns.TypeA, q.Name)
 			if ip != "" {
 				rr, _ = dns.NewRR(fmt.Sprintf("%s %d A %s", q.Name, s.settings.Ttl, ip))
+			} else if s.settings.Debug {
+				log.Printf("Missed A record for %s", q.Name)
 			}
 		case dns.TypePTR:
 			host := s.Get(dns.TypePTR, q.Name)
 			if host != "" {
 				rr, _ = dns.NewRR(fmt.Sprintf("%s %d PTR %s", q.Name, s.settings.Ttl, host))
 			}
-		case dns.TypeAAAA:
-			ip := s.Get(dns.TypeAAAA, q.Name)
+		case dns.TypeAAAA: // Bail for now if we have an ipv4
+			ip := s.Get(dns.TypeA, q.Name)
 			if ip != "" {
-				rr, _ = dns.NewRR(fmt.Sprintf("%s %d AAAA %s", q.Name, s.settings.Ttl, ip))
+				m.Rcode = dns.RcodeNameError
+				return true
 			}
 		default:
 			return false // If we get a question we can't answer, bail
