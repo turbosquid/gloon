@@ -18,4 +18,5 @@ type Settings struct {
 	Ttl                    int      // TTL to apply. Defaults to 10
 	NoPtr                  bool     // Don't create ptr records automatically when set
 	Debug                  bool     // More logging when set
+	ResolverTimeout        int      // Pass thru Resolver timeout
 }

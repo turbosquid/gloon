@@ -49,7 +49,7 @@ func NewResolver(settings *Settings) (r *Resolver, err error) {
 			log.Printf("Added forwarder: %s", host)
 		}
 	}
-	r.Client = &dns.Client{ReadTimeout: 5 * time.Second, WriteTimeout: 5 * time.Second}
+	r.Client = &dns.Client{ReadTimeout: time.Duration(settings.ResolverTimeout) * time.Second, WriteTimeout: time.Duration(settings.ResolverTimeout) * time.Second}
 	return
 }
 

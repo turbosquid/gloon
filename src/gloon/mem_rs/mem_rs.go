@@ -10,7 +10,7 @@ import (
 type RecData map[string]map[string]bool
 
 type MemRecordStore struct {
-	sync.Mutex
+	sync.RWMutex
 	data RecData
 }
 
@@ -33,8 +33,8 @@ func (rs *MemRecordStore) PutVal(dnsType uint16, key, val string) (err error) {
 }
 
 func (rs *MemRecordStore) GetAll(dnsType uint16, key string) (vals []string, err error) {
-	rs.Lock()
-	defer rs.Unlock()
+	rs.RLock()
+	defer rs.RUnlock()
 	valmap := rs.data[keyPath(dnsType, key)]
 	if valmap == nil {
 		vals = []string{}

@@ -1,6 +1,6 @@
 # gloon -  Cross Platform DNS Resolver/Forwarder with Docker Integration, API and More
 
-`gloon` is a forwarding DNS resolver that allows you to dynamically create custom A, AAAA,  or A wildcard dns
+`gloon` is a forwarding DNS resolver that allows you to dynamically create custom A, A wildcard dns or PTR
 records via some or all of the following mechanisms:
 
 * In response to docker events. A entries can be created and removed in response to container starts and stops. You can specify
@@ -129,7 +129,7 @@ instances of gloon with the same store opts to share an instance of redis.
 ## Known limitations
 
 * The docker monitor does not support multiple addresses for a single host, as this does not make much sense.
-* IPV6 support is still very incomplete
+* IPV6 support (AAAA) is currently not available. The resolver will forward these requests, or if we have a local A record, will return NXDOMAIN
 * We currently only pull the docker container address from the first network found. We should probably add an optional network selector.
 * Other record lookups might be desirable (cname, etc)
 

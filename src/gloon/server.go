@@ -8,6 +8,7 @@ import (
 	"gloon/redis_rs"
 	"log"
 	"regexp"
+	"time"
 )
 
 type Server struct {
@@ -55,6 +56,13 @@ func (s *Server) handleDnsRequest(w dns.ResponseWriter, r *dns.Msg) {
 	defer func() {
 		if r := recover(); r != nil {
 			handlePanic(r)
+		}
+	}()
+	start := time.Now()
+	defer func() {
+		if s.settings.Debug {
+			elapsed := time.Since(start)
+			log.Printf("%#v took %s", r.Question, elapsed)
 		}
 	}()
 	m := new(dns.Msg)

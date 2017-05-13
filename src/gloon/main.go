@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-const VERSION = "1.0.1"
+const VERSION = "1.0.2"
 
 func main() {
 	log.Printf("I AM GL00N")
@@ -107,6 +107,12 @@ func main() {
 			Value:       3600,
 			Usage:       "Returned ttl in `SEC` seconds",
 			Destination: &s.Ttl,
+		},
+		cli.IntFlag{
+			Name:        "resolver-timeout",
+			Value:       1,
+			Usage:       "Pass through resolver timeout in  `SEC` seconds.",
+			Destination: &s.ResolverTimeout,
 		},
 	}
 
