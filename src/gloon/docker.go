@@ -118,7 +118,7 @@ func (dm *DockerMonitor) addRecord(ID string) (err error) {
 	if dm.settings.AppendDomain != "" {
 		hostname = fmt.Sprintf("%s.%s", hostname, dm.settings.AppendDomain)
 	}
-	log.Printf("Adding A record: %s %s %s %s", ID[:10], container_json.Name, hostname, ip)
+	log.Printf("Adding A record: %s %s %s %s (nw = %s)", ID[:10], container_json.Name, hostname, ip, dm.settings.DockerNetwork)
 	recs.Put(dns.TypeA, hostname, ip)
 	return
 }
@@ -127,11 +127,12 @@ func getContainerIpV4(data types.ContainerJSON, nw string) (ip string) {
 	var ep *network.EndpointSettings
 	if nw != "" {
 		ep = data.NetworkSettings.Networks[nw]
-	}
-	// else just pick a random one
-	for _, v := range data.NetworkSettings.Networks {
-		ep = v
-		break
+	} else {
+		// else just pick a random one
+		for _, v := range data.NetworkSettings.Networks {
+			ep = v
+			break
+		}
 	}
 	if ep != nil {
 		ip = ep.IPAddress
