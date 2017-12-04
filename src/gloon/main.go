@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-const VERSION = "1.0.2"
+const VERSION = "1.0.3"
 
 func main() {
 	log.Printf("I AM GL00N")
@@ -113,6 +113,12 @@ func main() {
 			Value:       1,
 			Usage:       "Pass through resolver timeout in  `SEC` seconds.",
 			Destination: &s.ResolverTimeout,
+		},
+		cli.StringFlag{
+			Name:        "docker-network",
+			Value:       "",
+			Usage:       "Restrict A records to ips found on docker network `NETWORK`",
+			Destination: &s.DockerNetwork,
 		},
 	}
 

@@ -19,4 +19,5 @@ type Settings struct {
 	NoPtr                  bool     // Don't create ptr records automatically when set
 	Debug                  bool     // More logging when set
 	ResolverTimeout        int      // Pass thru Resolver timeout
+	DockerNetwork          string   // Restrict docker ips to those found on this network
 }

@@ -114,7 +114,7 @@ func (dm *DockerMonitor) addRecord(ID string) (err error) {
 		log.Printf("NOTE: hostname %s does not match filter %s. Ignoring.", hostname, dm.settings.HostnameFilter)
 		return
 	}
-	ip := getContainerIpV4(container_json, "")
+	ip := getContainerIpV4(container_json, dm.settings.DockerNetwork)
 	if dm.settings.AppendDomain != "" {
 		hostname = fmt.Sprintf("%s.%s", hostname, dm.settings.AppendDomain)
 	}
